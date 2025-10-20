@@ -17,9 +17,10 @@ const CustomMagicLink = () => {
   try {
     console.log('Sending magic link payload:', email);
     //send magic link using stackClientApp - not email sign in like a dumbass (Thats me)
-    await stackClientApp.sendMagicLinkEmail(email, {
-  redirectTo: `${window.location.origin}/auth/callback`,
-});
+    await stackClientApp.sendMagicLinkEmail(
+      email,
+      `${window.location.origin}/auth/callback`
+    );
 
     setMessage('✅ Magic link sent — check your email!');
   } catch (err) {

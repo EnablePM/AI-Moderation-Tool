@@ -15,7 +15,6 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* ✅ Only one provider at root */}
       <StackProvider app={stackClientApp}>
         <App />
       </StackProvider>

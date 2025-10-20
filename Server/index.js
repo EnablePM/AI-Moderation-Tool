@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const corsOptions = require('./src/Config/corsOptions.js');
-const connectDB = require('./src/Config/db.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -19,7 +18,6 @@ app.get('/', (req, res) => {
 
 const startServer = async () => {
  try {
-   await connectDB(); 
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });

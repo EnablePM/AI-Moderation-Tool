@@ -1,4 +1,5 @@
-import React from 'react';
+// ...existing code...
+import React, { useState } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useUser } from '@stackframe/react';
@@ -16,6 +17,11 @@ import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 
 const Dashboard = () => {
   const user = useUser();
+  const [tabValue, setTabValue] = useState('1');
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', }}>
@@ -85,19 +91,33 @@ const Dashboard = () => {
             </Paper>
           </Stack>
         </Box>
-        <TabContext value="1">
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: 'background.paper', borderRadius: 1 }}>
-            <TabList aria-label="dashboard tabs">
-              <Tab label="Clusters" value="1" />
-              <Tab label="Moderation" value="2" />
+
+        {/* Updated Tab section: tabs span full width and sit side-by-side */}
+        <TabContext value={tabValue}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: 'background.paper', borderRadius: 1, width: '100%' }}>
+            <TabList
+              onChange={handleTabChange}
+              aria-label="dashboard tabs"
+              variant="fullWidth"              /* makes tabs fill the container */
+              sx={{ width: '100%' }}
+            >
+              <Tab label="Clusters" value="1" sx={{ minWidth: 0 }} />
+              <Tab label="Moderation" value="2" sx={{ minWidth: 0 }} />
             </TabList>
           </Box>
-          <TabPanel value="1" sx={{ p: 0, pt:2 }}>
+
+          <TabPanel value="1" sx={{ p: 0, pt:2, width: '100%' }}>
             <FilterBar />
             <CardGrid />
           </TabPanel>
-          <TabPanel value="2" sx={{ p: 0, pt:2 }}>
-            {/* Content for Moderation tab */}
+
+          <TabPanel value="2" sx={{ p: 0, pt:2, width: '100%' }}>
+            {/* Moderation content */}
+            <Typography variant="h6" sx={{ mb: 2 }}>Moderation</Typography>
+            <Paper sx={{ p: 2 }}>
+              {/* replace with real moderation UI */}
+              <Typography variant="body2">Moderation panel content goes here.</Typography>
+            </Paper>
           </TabPanel>
         </TabContext>
       </Box>
@@ -106,4 +126,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
+// ...existing code...

@@ -5,7 +5,6 @@ import { useUser } from "@stackframe/react";
 import { stackClientApp } from "../stack/client";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import logo from "../../public/CocaCola_Original_Logo.png"
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -21,20 +20,20 @@ export default function Navbar() {
       position="static" 
       elevation={2} 
       sx={{ 
-        px: 2,
+        px: { xs: 2, sm: 3, md: 6, lg: 12, xl: 20 },
         borderRadius: '0px',
         backgroundColor: (theme) => theme.palette.navbar.backgroundColor,
         color: (theme) => theme.palette.navbar.color,
       }}
     > 
-      <Toolbar>
+      <Toolbar sx={{ px: 0 }}>
         <Box 
         component="img"
         sx={{
           height: 29,
           mr: 3,
         }}
-        src={logo}
+        src="/CocaCola_Original_Logo.png"
         alt="Logo"
         />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1,  }}>

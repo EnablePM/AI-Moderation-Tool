@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "title": "Misleading product claims spreading across social media",
+    "riskPercentage": 96,
+    "sentiment": "Negative",
+    "category": "Political",
+    "clusterId": "123456",
+    "date": "01/01/2024",
+    "sources": 10,
+    "progressValue": 70,
+    "progressText": "70% of sources indicate harmful content"
+  },
+  {
+    "id": 2,
+    "title": "Coordinated harassment campaign targeting users",
+    "riskPercentage": 89,
+    "sentiment": "Abusive",
+    "category": "Harassment",
+    "clusterId": "234567",
+    "date": "10/15/2024",
+    "sources": 24,
+    "progressValue": 85,
+    "progressText": "85% of sources indicate harmful content"
+  },
+  {
+    "id": 3,
+    "title": "Potential misinformation about health claims",
+    "riskPercentage": 72,
+    "sentiment": "Misleading",
+    "category": "Health",
+    "clusterId": "345678",
+    "date": "10/18/2024",
+    "sources": 15,
+    "progressValue": 65,
+    "progressText": "65% of sources indicate harmful content"
+  },
+  {
+    "id": 4,
+    "title": "Spam campaign promoting fraudulent services",
+    "riskPercentage": 58,
+    "sentiment": "Spam",
+    "category": "Commercial",
+    "clusterId": "456789",
+    "date": "10/20/2024",
+    "sources": 8,
+    "progressValue": 55,
+    "progressText": "55% of sources indicate harmful content"
+  },
+  {
+    "id": 5,
+    "title": "Hate speech patterns detected in comments",
+    "riskPercentage": 94,
+    "sentiment": "Hateful",
+    "category": "Discrimination",
+    "clusterId": "567890",
+    "date": "10/21/2024",
+    "sources": 32,
+    "progressValue": 92,
+    "progressText": "92% of sources indicate harmful content"
+  }
+]
+

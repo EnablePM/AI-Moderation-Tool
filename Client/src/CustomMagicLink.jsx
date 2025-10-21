@@ -42,10 +42,18 @@ const CustomMagicLink = () => {
         p: 2,
       }}
     >
-      <Paper sx={{ p: 5, borderRadius: 3, maxWidth: 420, width: '100%', textAlign: 'center' }} elevation={6}>
-        <MailOutlineIcon sx={{ fontSize: 52, color: 'primary.main', mb: 1 }} />
+      <Paper sx={{ p: 5, borderRadius: 3, maxWidth: 500, width: '100%', textAlign: 'center'}} elevation={6}>
+         <Box 
+          component="img"
+          sx={{
+            width: 300,
+            mb:3
+          }}
+          src="/Red_coca_cola logo.png"
+          alt="Logo"
+          />
         <Typography variant="h5" gutterBottom>
-          Sign in with Magic Link
+          Sign in to the AI Moderation Tool
         </Typography>
         <Typography variant="body2" color="text.secondary" mb={3}>
           Enter your email to receive a login link.
@@ -58,11 +66,12 @@ const CustomMagicLink = () => {
             fullWidth
             required
             value={email}
+            size='small'
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 2 }}
           />
 
-          <Button type="submit" variant="contained" fullWidth disabled={loading}>
+          <Button type="submit" variant="contained" color='Coke' fullWidth disabled={loading}>
             {loading ? <CircularProgress size={22} /> : 'Send Magic Link'}
           </Button>
         </form>

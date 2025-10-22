@@ -1,13 +1,12 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUser } from '@stackframe/react';
+import { useAuth } from './hooks/useAuth';
 import { CircularProgress, Box } from '@mui/material';
 
 const ProtectedRoute = ({ children }) => {
-  const user = useUser();
+  const { user, loading } = useAuth();
 
-  // Show loading state while checking authentication
-  if (user === undefined) {
+  if (loading) {
     return (
       <Box
         sx={{
@@ -22,12 +21,12 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // Not authenticated, redirect to login
-  if (user === null) {
+  // Not authenticated, no no to the dashboard
+  if (!user) {
     return <Navigate to="/" replace />;
   }
 
-  // User is authenticated, render the protected component
+  // User is authenticated, render the protected component (dashboard)
   return children;
 };
 

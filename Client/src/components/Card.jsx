@@ -10,6 +10,8 @@ import CrisisAlertSharpIcon from '@mui/icons-material/CrisisAlertSharp';
 import DialogPopup from './Dialog Popup';
 
 export default function MediaCard({ data }) {
+
+  //Card component for the clusters. We just need to feed live data to the card. Can do when we get API sorted.
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

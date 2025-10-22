@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 
 
 export default function FilterBar() {
+    //I dont need to explain this one. Its just a filter and search bar for the clusters.
   return (
     <div>
         <Paper sx={{ p: 4, borderRadius: 2, height: '100%' }} elevation={3}>

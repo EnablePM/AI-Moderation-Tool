@@ -1,17 +1,17 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@stackframe/react";
-import { stackClientApp } from "../stack/client";
+import { useAuth } from "../hooks/useAuth";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function Navbar() {
+  // Dope navbar. Need to handle breakpoints and mobile responsiveness as signin button kinda gammy 
   const navigate = useNavigate();
-  const user = useUser();
+  const { user, signOut } = useAuth();
 
   const handleSignOut = async () => {
-    await stackClientApp.signOut();
+    await signOut();
     navigate("/");
   };
 
@@ -45,7 +45,7 @@ export default function Navbar() {
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <AccountCircleIcon />
               <Typography variant="body2">
-                {user.primaryEmail || "User"}
+                {user?.email || "User"}
               </Typography>
             </Box>
             <Button variant="contained" color="Navbar" onClick={handleSignOut}>

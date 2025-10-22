@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Paper, TextField, Button, Typography, CircularProgress } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { stackClientApp } from './stack/client'; 
+import { useAuth } from './hooks/useAuth'; 
 
 const CustomMagicLink = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const { sendMagicLink } = useAuth();
 
   //submits magic link request - email if good 
  const handleSubmit = async (e) => {
@@ -16,13 +17,15 @@ const CustomMagicLink = () => {
 
   try {
     console.log('Sending magic link payload:', email);
-    //send magic link using stackClientApp - not email sign in like a dumbass (Thats me)
-    await stackClientApp.sendMagicLinkEmail(
-      email,
-      `${window.location.origin}/auth/callback`
-    );
-
+    const response = await sendMagicLink(email);
+    
     setMessage('✅ Magic link sent — check your email!');
+    
+    // For testing, show the magic link. Follow the link to test the magic link as we can send it to email when we are closer to production. plus its easier to test.
+    if (response.magicLink) {
+      console.log('Magic link for testing:', response.magicLink);
+      setMessage(`✅ Magic link sent! For testing: ${response.magicLink}`);
+    }
   } catch (err) {
     console.error('Error sending magic link:', err);
     setMessage('❌ Failed to send magic link. Please try again.');

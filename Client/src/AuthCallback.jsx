@@ -1,47 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { stackClientApp } from './stack/client';
 import { CircularProgress, Box, Typography } from '@mui/material';
+import { useAuth } from './hooks/useAuth';
 
 const AuthCallback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [error, setError] = useState(false);
+  const { verifyMagicLink } = useAuth();
   
   // Stack Auth sends the code as a query parameter
-  const code = searchParams.get('code');
+  const token = searchParams.get('token');
   
   useEffect(() => {
+    const handleMagicLinkVerification = async (magicLinkToken) => {
+      try {
+        console.log('🔐 Starting magic link verification...');
+        
+        // Exchange magic link token for session token in da backend
+        console.log('📝 Verifying magic link with backend...');
+        await verifyMagicLink(magicLinkToken);
+        
+        console.log('✅ Successfully signed in, redirecting to dashboard...');
+        navigate('/dashboard', { replace: true });
+      } catch (error) {
+        console.error('❌ Magic link verification failed:', error);
+        setError(true);
+        setTimeout(() => {
+          navigate('/', { replace: true });
+        }, 2000);
+      }
+    };
+
     console.log('AuthCallback - URL search params:', searchParams.toString());
-    console.log('AuthCallback - Code:', code);
+    console.log('AuthCallback - Token:', token);
     
-    if (!code) {
-      console.error('No code in URL, redirecting to login');
+    if (!token) {
+      console.error('No token in URL, redirecting to login');
       navigate('/', { replace: true });
       return;
     }
 
-    handleMagicLinkVerification(code);
-  }, [code, navigate]);
-
-  const handleMagicLinkVerification = async (otpCode) => {
-    try {
-      console.log('🔐 Starting magic link verification...');
-      
-      // Exchange OTP code for Stack Auth session
-      console.log('📝 Signing in with code...');
-      await stackClientApp.signInWithMagicLink(otpCode);
-      
-      console.log('✅ Successfully signed in, redirecting to dashboard...');
-      navigate('/dashboard', { replace: true });
-    } catch (error) {
-      console.error('❌ Magic link verification failed:', error);
-      setError(true);
-      setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 2000);
-    }
-  };
+    handleMagicLinkVerification(token);
+  }, [token, navigate, searchParams, verifyMagicLink]);
 
   return (
     <Box

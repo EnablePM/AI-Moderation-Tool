@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
+// Theme for the app. Should probably be tidied up but for now this is okay
+
 const theme = createTheme({
   palette: {
     mode: 'light',

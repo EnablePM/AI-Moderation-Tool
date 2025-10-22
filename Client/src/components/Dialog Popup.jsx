@@ -7,6 +7,8 @@ import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 
 const DialogPopup = ({ open, onClose, title, closeCard, clusterId, riskPercentage, sentiment, category, sources, summary}) => {
+
+  // This is the thing that pops up when the View cluster details button is clicked. Kinda ugly. Tom lets plan a structure.
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>  
         <DialogTitle id="dialog-title" variant='h5'>{title}</DialogTitle>

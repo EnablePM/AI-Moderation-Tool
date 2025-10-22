@@ -1,8 +1,8 @@
-// ...existing code...
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import { useUser } from '@stackframe/react';
+import { useAuth } from './hooks/useAuth';
+import { dashboardAPI } from './services/api';
 import Navbar from './components/navbar';
 import CardGrid from './components/CardGrid';
 import Tab from '@mui/material/Tab';
@@ -16,12 +16,43 @@ import GppBadOutlinedIcon from '@mui/icons-material/GppBadOutlined';
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 
 const Dashboard = () => {
-  const user = useUser();
+  const { user } = useAuth();
   const [tabValue, setTabValue] = useState('1');
+  const [stats, setStats] = useState({
+    totalTrends: 0,
+    highRiskTrends: 0,
+    moderationRules: 0,
+    activeSources: 0
+  });
+  const [loading, setLoading] = useState(true);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  // Fetch dashboard data from backend
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        const response = await dashboardAPI.getStats();
+        setStats(response.data);
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+        // Fallback to default values if API fails (for testing purposes as this is terribly handled)
+        setStats({
+          totalTrends: 150,
+          highRiskTrends: 45,
+          moderationRules: 60,
+          activeSources: 45
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', }}>
@@ -51,10 +82,16 @@ const Dashboard = () => {
                 User Information:
               </Typography>
               <Typography variant="body2" sx={{ mt: 1 }}>
-                Email: {user.primaryEmail || 'N/A'}
+                Email: {user.email || 'N/A'}
+              </Typography>
+              <Typography variant="body2">
+                Username: {user.username || 'N/A'}
               </Typography>
               <Typography variant="body2">
                 User ID: {user.id}
+              </Typography>
+              <Typography variant="body2">
+                User Role: {user.role || 'N/A'}
               </Typography>
             </Box>
           )}
@@ -66,39 +103,38 @@ const Dashboard = () => {
                 <Typography variant="h6" >Total Trends</Typography>
                 <StackedLineChartIcon sx={{ fontSize: 25, color: 'pill.danger' }}/>
               </Box>
-              <Typography variant="h4">150</Typography>
+              <Typography variant="h4">{loading ? '...' : stats.totalTrends}</Typography>
             </Paper>
             <Paper sx={{ p: 3, flex: 1}} elevation={3}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:1, mb:1 }}>
               <Typography variant="h6">High Risk Trends</Typography>
               <WarningAmberIcon sx={{ fontSize: 25, color: 'pill.danger' }}/>
               </Box>
-               <Typography variant="h4">45</Typography>
+               <Typography variant="h4">{loading ? '...' : stats.highRiskTrends}</Typography>
             </Paper>
             <Paper sx={{ p: 3, flex: 1 }} elevation={3}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:1, mb:1}}> 
                 <Typography variant="h6">Moderation Rules</Typography>
                 <GppBadOutlinedIcon sx={{ fontSize: 25, color: 'pill.danger' }}/>
               </Box>
-              <Typography variant="h4">60</Typography>
+              <Typography variant="h4">{loading ? '...' : stats.moderationRules}</Typography>
             </Paper>
             <Paper sx={{ p: 3, flex: 1 }} elevation={3}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap:1, mb:1}}>
                 <Typography variant="h6">Active Sources</Typography>
                 <DoneAllOutlinedIcon sx={{ fontSize: 25, color: 'pill.danger' }}/>  
               </Box>
-              <Typography variant="h4">45</Typography>
+              <Typography variant="h4">{loading ? '...' : stats.activeSources}</Typography>
             </Paper>
           </Stack>
         </Box>
 
-        {/* Updated Tab section: tabs span full width and sit side-by-side */}
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', backgroundColor: 'background.paper', borderRadius: 1, width: '100%' }}>
             <TabList
               onChange={handleTabChange}
               aria-label="dashboard tabs"
-              variant="fullWidth"              /* makes tabs fill the container */
+              variant="fullWidth"            
               sx={{ width: '100%' }}
             >
               <Tab label="Clusters" value="1" sx={{ minWidth: 0 }} />
@@ -112,10 +148,10 @@ const Dashboard = () => {
           </TabPanel>
 
           <TabPanel value="2" sx={{ p: 0, pt:2, width: '100%' }}>
-            {/* Moderation content */}
+            {/* Moderation content will go here soon*/}
             <Typography variant="h6" sx={{ mb: 2 }}>Moderation</Typography>
             <Paper sx={{ p: 2 }}>
-              {/* replace with real moderation UI */}
+              {/* The list where all the moderation rules will go */}
               <Typography variant="body2">Moderation panel content goes here.</Typography>
             </Paper>
           </TabPanel>

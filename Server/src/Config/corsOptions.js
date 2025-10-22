@@ -1,4 +1,4 @@
-// ...existing code...
+
 const allowedCors = require('./allowedCors');
 
 const corsOptions = {

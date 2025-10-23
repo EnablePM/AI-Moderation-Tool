@@ -8,24 +8,22 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(null);
 
-  // Check for existing token on app load AKA checks if the user is already logged in (kinda)
+  // Check for existing session on app load using HTTP-only cookies
   useEffect(() => {
     const checkAuth = async () => {
-      const storedToken = tokenUtils.getToken();
-      if (storedToken) {
-        try {
-          const response = await authAPI.getUserProfile(storedToken);
-          if (response.success && response.user) {
-            setUser(response.user);
-            setToken(storedToken);
-          } else {
-            // Invalid response, clear token
-            tokenUtils.removeToken();
-          }
-        } catch (error) {
-          console.error('Token validation failed:', error);
-          tokenUtils.removeToken();
+      try {
+        // Clear any existing localStorage tokens for security
+        tokenUtils.clearAllAuthData();
+        
+        const response = await authAPI.getUserProfile();
+        if (response.success && response.user) {
+          setUser(response.user);
+          setToken('cookie-based'); // Indicate we're using cookie-based auth
         }
+      } catch (error) {
+        console.error('Session validation failed:', error);
+        // Clear any stale localStorage tokens
+        tokenUtils.removeToken();
       }
       setLoading(false);
     };
@@ -43,9 +41,8 @@ export const AuthProvider = ({ children }) => {
   const verifyMagicLink = async (magicLinkToken) => {
     const response = await authAPI.verifyMagicLink(magicLinkToken);
     
-    // Store token and user data
-    tokenUtils.setToken(response.token);
-    setToken(response.token);
+    // Set user data (token is stored in HTTP-only cookie by server)
+    setToken('cookie-based'); // Indicate we're using cookie-based auth
     setUser(response.user);
     
     return response;

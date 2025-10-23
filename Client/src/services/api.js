@@ -9,6 +9,7 @@ const apiRequest = async (endpoint, options = {}) => {
       'Content-Type': 'application/json',
       ...options.headers,
     },
+    credentials: 'include', // Include cookies in requests
     ...options,
   };
 
@@ -53,12 +54,9 @@ export const authAPI = {
   },
 
   // Get user profile
-  getUserProfile: async (token) => {
+  getUserProfile: async () => {
     return apiRequest('/auth/user-profile', {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
   },
 };
@@ -73,46 +71,30 @@ export const dashboardAPI = {
   },
 
   // Get user info
-  getUserInfo: async (token) => {
+  getUserInfo: async () => {
     return apiRequest('/dashboard/user-info', {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
   },
 
   // Get dashboard overview (this is not used yet)
-  getOverview: async (token) => {
+  getOverview: async () => {
     return apiRequest('/dashboard/overview', {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
   },
 };
 
-// Token management utilities
+// Token management utilities (legacy - now using HTTP-only cookies)
 export const tokenUtils = {
-  // Store token in localStorage
-  setToken: (token) => {
-    localStorage.setItem('authToken', token);
-  },
-
-  // Get token from localStorage
-  getToken: () => {
-    return localStorage.getItem('authToken');
-  },
-
-  // Remove token from localStorage
+  // Remove any existing localStorage tokens (cleanup for security)
   removeToken: () => {
     localStorage.removeItem('authToken');
   },
 
-  // Check if user is authenticated
-  isAuthenticated: () => {
-    const token = localStorage.getItem('authToken');
-    return !!token;
+  // Clear all auth-related localStorage items
+  clearAllAuthData: () => {
+    localStorage.removeItem('authToken');
+    // Add any other auth-related keys here if needed
   },
 };

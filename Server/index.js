@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 // configz
 const corsOptions = require('./src/Config/corsOptions');
@@ -9,6 +10,7 @@ const connectDB = require('./src/Config/db');
 // routes init
 const authRoutes = require('./src/Routes/auth');
 const dashboardRoutes = require('./src/Routes/dashboard');
+const adminRoutes = require('./src/Routes/admin');
 
 // Load environment variables
 dotenv.config();
@@ -19,11 +21,11 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(cors(corsOptions));
-
+app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-
+app.use('/api/admin', adminRoutes);
 // Health check for endpoints
 app.get('/', (req, res) => {
   res.json({

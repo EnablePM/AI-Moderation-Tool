@@ -62,10 +62,18 @@ const verifyMagicLink = async (req, res) => {
     // Generate session token
     const sessionToken = generateToken(user._id);
 
+    // Set HTTP-only cookie with the token
+    res.cookie('authToken', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only use secure in production
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // quick math (7 days)
+      path: '/'
+    });
+
     res.json({
       success: true,
       message: 'Magic link verified successfully',
-      token: sessionToken,
       user: {
         id: user._id,
         email: user.email,
@@ -88,8 +96,14 @@ const verifyMagicLink = async (req, res) => {
 
 // Sign out user
 const signOut = (req, res) => {
-  // In a stateless JWT system, signout is handled client-side
-  // We can implement token blacklisting here if needed
+  // Clear the auth cookie
+  res.clearCookie('authToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/'
+  });
+  
   res.json({
     success: true,
     message: 'Signed out successfully'
@@ -119,6 +133,21 @@ const getUserProfile = async (req, res) => {
   } catch (error) {
     console.error('Error getting user profile:', error);
     res.status(500).json({ error: 'Failed to get user profile' });
+  }
+};
+
+// Get all users for admin / moderation page 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json({
+      success: true,
+      users: users
+    });
+  }
+  catch (error) {
+    console.error('Error getting all users:', error);
+    res.status(500).json({ error: 'Failed to get all users' });
   }
 };
 

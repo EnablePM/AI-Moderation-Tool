@@ -1,5 +1,5 @@
 // API service functions for backend communication
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 // a way of doing API request. Kinda want to make this more robust but i'm not sure how to do it. May RTKQ or something like that.
 const apiRequest = async (endpoint, options = {}) => {

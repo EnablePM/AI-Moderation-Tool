@@ -124,14 +124,14 @@ export default function MediaCard({ data }) {
           }}
         >
           <Button
-            size="md"
+            size="small"
             sx={{ width: '50%', display: 'inline-flex', justifyContent: 'center' }}
             variant="contained"
             color="primary"
             startIcon={<CrisisAlertSharpIcon />}
             onClick={handleClickOpen}
           >
-            View Cluster details
+            Cluster details
           </Button>
           <Button size="md" sx={{ width: '50%' }} variant="contained" color="secondary">
             Suggested Phrases

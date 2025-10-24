@@ -19,12 +19,12 @@ const CustomMagicLink = () => {
     console.log('Sending magic link payload:', email);
     const response = await sendMagicLink(email);
     
-    setMessage('✅ Magic link sent — check your email!');
+    setMessage('Magic link sent — check your email!');
     
     // For testing, show the magic link. Follow the link to test the magic link as we can send it to email when we are closer to production. plus its easier to test.
     if (response.magicLink) {
       console.log('Magic link for testing:', response.magicLink);
-      setMessage(`✅ Magic link sent! For testing: ${response.magicLink}`);
+      setMessage(`Too lazy here to send the email so have a link ${response.magicLink}`);
     }
   } catch (err) {
     console.error('Error sending magic link:', err);
@@ -82,7 +82,7 @@ const CustomMagicLink = () => {
         {message && (
           <Typography
             variant="body2"
-            sx={{ mt: 2, color: message.startsWith('✅') ? 'success.main' : 'error.main' }}
+            sx={{ mt: 2, color: message.startsWith('Too') ? 'success.main' : 'error.main' }}
           >
             {message}
           </Typography>

@@ -11,20 +11,22 @@ export const AuthProvider = ({ children }) => {
   // Check for existing session on app load using HTTP-only cookies
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        // Clear any existing localStorage tokens for security
-        tokenUtils.clearAllAuthData();
-        
-        const response = await authAPI.getUserProfile();
-        if (response.success && response.user) {
-          setUser(response.user);
-          setToken('cookie-based'); // Indicate we're using cookie-based auth
-        }
-      } catch (error) {
-        console.error('Session validation failed:', error);
-        // Clear any stale localStorage tokens
+      // Clear any existing localStorage tokens for security
+      tokenUtils.clearAllAuthData();
+      
+      console.log('Scanning.... if you see this, you are not authenticated yet');
+      const response = await authAPI.checkSession();
+      
+      if (response?.success && response.user) {
+        setUser(response.user);
+        setToken('cookie-based'); 
+        console.log(' User authenticated successfully');
+      } else {
+        // No active session - this is normal for unauthenticated users
+        console.log('ℹNo active session found - user needs to auth');
         tokenUtils.removeToken();
       }
+      
       setLoading(false);
     };
 

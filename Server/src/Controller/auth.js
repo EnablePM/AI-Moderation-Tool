@@ -17,7 +17,7 @@ const sendMagicLink = async (req, res) => {
       user = new User({
         email,
         username: email.split('@')[0], 
-        role: 'user'
+        role: 'User'
       });
       await user.save();
     }
@@ -66,7 +66,7 @@ const verifyMagicLink = async (req, res) => {
     res.cookie('authToken', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only use secure in production
-      sameSite: 'strict',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // More permissive for development
       maxAge: 7 * 24 * 60 * 60 * 1000, // quick math (7 days)
       path: '/'
     });
@@ -100,7 +100,7 @@ const signOut = (req, res) => {
   res.clearCookie('authToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
     path: '/'
   });
   

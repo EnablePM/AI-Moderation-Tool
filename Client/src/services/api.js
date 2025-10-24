@@ -59,6 +59,40 @@ export const authAPI = {
       method: 'GET',
     });
   },
+
+  // Check session - returns null if not authenticated (doesn't throw)
+  checkSession: async () => {
+    const url = `${API_BASE_URL}/auth/user-profile`;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      method: 'GET',
+    };
+
+    try {
+      const response = await fetch(url, config);
+      const data = await response.json();
+
+      // If not authenticated, return null instead of throwing
+      if (response.status === 401 || response.status === 403) {
+        return null;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Session check failed');
+      }
+
+      return data;
+    } catch (error) {
+      // Only log unexpected errors (not auth failures)
+      if (error.message !== 'Session check failed') {
+        console.error('Unexpected session check error:', error);
+      }
+      return null;
+    }
+  },
 };
 
 // Dashboard API functions
